@@ -51,3 +51,14 @@ li {
   border-radius: 6px;
   border: 1px solid #ddd;
 }
+
+li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+li.done span {
+  text-decoration: line-through;
+  color: #888;
+}
