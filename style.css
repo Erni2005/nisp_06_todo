@@ -2,11 +2,18 @@ body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f4f6f8;
-  
+
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 100vh;
+
+  min-height: 100vh;
+  padding-top: 40px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 form, ul {
@@ -46,19 +53,33 @@ ul {
 
 li {
   background: white;
-  padding: 10px;
+  padding: 12px 15px;
   margin-bottom: 10px;
   border-radius: 6px;
   border: 1px solid #ddd;
+
+  display: grid;
+  grid-template-columns: 30px 1fr auto;
+  align-items: center;
 }
 
-li {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+li span {
+    margin-left: 10px;
+}
+
+li button {
+    margin-left: auto;
 }
 
 li.done span {
   text-decoration: line-through;
   color: #888;
+}
+
+input[type="checkbox"] {
+  justify-self: start;
+}
+
+li button {
+  justify-self: end;
 }

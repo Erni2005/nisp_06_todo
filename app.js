@@ -61,36 +61,41 @@ class TodoApp {
   }
 
   createTaskElement(task) {
-    const li = document.createElement("li");
+  const li = document.createElement("li");
 
-    if (task.done) {
-      li.classList.add("done");
+  if (task.done) {
+    li.classList.add("done");
+  }
+
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = task.done;
+
+  checkbox.addEventListener("change", () => {
+    this.toggleTask(task.id);
+  });
+
+  const span = document.createElement("span");
+  span.textContent = task.text;
+
+  const deleteBtn = document.createElement("button");
+  deleteBtn.textContent = "Usuń";
+
+  deleteBtn.addEventListener("click", () => {
+    if (!checkbox.checked) {
+      alert("Najpierw zaznacz zadanie ✔");
+      return;
     }
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = task.done;
+    this.deleteTask(task.id);
+  });
 
-    checkbox.addEventListener("change", () => {
-      this.toggleTask(task.id);
-    });
+  li.appendChild(checkbox);
+  li.appendChild(span);
+  li.appendChild(deleteBtn);
 
-    const span = document.createElement("span");
-    span.textContent = task.text;
-
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Usuń";
-
-    deleteBtn.addEventListener("click", () => {
-      this.deleteTask(task.id);
-    });
-
-    li.appendChild(checkbox);
-    li.appendChild(span);
-    li.appendChild(deleteBtn);
-
-    return li;
-  }
+  return li;
+}
 
   render() {
     this.list.innerHTML = "";
