@@ -30,7 +30,6 @@ form.addEventListener("submit", function (e) {
     const span = document.createElement("span");
     span.textContent = value;
 
-    // reakcja na zaznaczenie
     checkbox.addEventListener("change", function () {
       li.classList.toggle("done");
     });
@@ -41,4 +40,12 @@ form.addEventListener("submit", function (e) {
     list.appendChild(li);
     input.value = "";
   }
+});
+
+const przyciski = document.querySelectorAll(".usun");
+
+przyciski.forEach(przycisk => {
+    przycisk.addEventListener("click", function() {
+        this.parentElement.remove();
+    });
 });
