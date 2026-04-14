@@ -1,51 +1,105 @@
-const form = document.getElementById("task-form");
-const input = document.getElementById("task-input");
-const list = document.getElementById("task-list");
+class TodoApp {
+  constructor() {
+    this.form = document.getElementById("task-form");
+    this.input = document.getElementById("task-input");
+    this.list = document.getElementById("task-list");
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault(); 
+    this.tasks = this.loadTasks();
 
-  const value = input.value.trim();
-
-  if (value !== "") {
-    const li = document.createElement("li");
-    li.textContent = value;
-
-    list.appendChild(li);
-    input.value = ""; 
+    this.init();
   }
-});
 
-form.addEventListener("submit", function (e) {
-  e.preventDefault();
+  init() {
+    this.render();
 
-  const value = input.value.trim();
+    this.form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      this.addTask();
+    });
+  }
 
-  if (value !== "") {
+  addTask() {
+    const value = this.input.value.trim();
+
+    if (!value) return;
+
+    const task = {
+      id: Date.now(),
+      text: value,
+      done: false
+    };
+
+    this.tasks.push(task);
+    this.saveTasks();
+    this.render();
+
+    this.input.value = "";
+  }
+
+  deleteTask(id) {
+    this.tasks = this.tasks.filter(task => task.id !== id);
+    this.saveTasks();
+    this.render();
+  }
+
+  toggleTask(id) {
+    this.tasks = this.tasks.map(task =>
+      task.id === id ? { ...task, done: !task.done } : task
+    );
+
+    this.saveTasks();
+    this.render();
+  }
+
+  saveTasks() {
+    localStorage.setItem("tasks", JSON.stringify(this.tasks));
+  }
+
+  loadTasks() {
+    const tasks = localStorage.getItem("tasks");
+    return tasks ? JSON.parse(tasks) : [];
+  }
+
+  createTaskElement(task) {
     const li = document.createElement("li");
+
+    if (task.done) {
+      li.classList.add("done");
+    }
 
     const checkbox = document.createElement("input");
     checkbox.type = "checkbox";
+    checkbox.checked = task.done;
+
+    checkbox.addEventListener("change", () => {
+      this.toggleTask(task.id);
+    });
 
     const span = document.createElement("span");
-    span.textContent = value;
+    span.textContent = task.text;
 
-    checkbox.addEventListener("change", function () {
-      li.classList.toggle("done");
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Usuń";
+
+    deleteBtn.addEventListener("click", () => {
+      this.deleteTask(task.id);
     });
 
     li.appendChild(checkbox);
     li.appendChild(span);
+    li.appendChild(deleteBtn);
 
-    list.appendChild(li);
-    input.value = "";
+    return li;
   }
-});
 
-const przyciski = document.querySelectorAll(".usun");
+  render() {
+    this.list.innerHTML = "";
 
-przyciski.forEach(przycisk => {
-    przycisk.addEventListener("click", function() {
-        this.parentElement.remove();
+    this.tasks.forEach(task => {
+      const taskElement = this.createTaskElement(task);
+      this.list.appendChild(taskElement);
     });
-});
+  }
+}
+
+new TodoApp();
